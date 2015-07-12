@@ -452,7 +452,10 @@ typedef JSObject* (*ClassObjectCreationOp)(JSContext* cx, JSProtoKey key);
 typedef bool (*FinishClassInitOp)(JSContext* cx, JS::HandleObject ctor,
                                   JS::HandleObject proto);
 
-const size_t JSCLASS_CACHED_PROTO_WIDTH = 6;
+#ifndef JSCLASS_CACHED_PROTO_WIDTH_VALUE
+#define JSCLASS_CACHED_PROTO_WIDTH_VALUE 6
+#endif
+const size_t JSCLASS_CACHED_PROTO_WIDTH = JSCLASS_CACHED_PROTO_WIDTH_VALUE;
 
 struct ClassSpec
 {
@@ -683,7 +686,7 @@ struct JSClass {
 
 // Fast access to the original value of each standard class's prototype.
 #define JSCLASS_CACHED_PROTO_SHIFT      (JSCLASS_HIGH_FLAGS_SHIFT + 10)
-#define JSCLASS_CACHED_PROTO_MASK       JS_BITMASK(JSCLASS_CACHED_PROTO_WIDTH)
+#define JSCLASS_CACHED_PROTO_MASK       JS_BITMASK(JSCLASS_CACHED_PROTO_WIDTH_VALUE)
 #define JSCLASS_HAS_CACHED_PROTO(key)   (uint32_t(key) << JSCLASS_CACHED_PROTO_SHIFT)
 #define JSCLASS_CACHED_PROTO_KEY(clasp) ((JSProtoKey)                         \
                                          (((clasp)->flags                     \
